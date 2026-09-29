@@ -50,7 +50,7 @@ docker compose up --build
 
 | Метод | Путь | Описание |
 |---|---|---|
-| GET | `/api/todos` | список задач |
+| GET | `/api/todos` | список задач (`?limit=`, `?offset=`) |
 | POST | `/api/todos` | создать задачу |
 | GET | `/api/todos/{id}` | получить задачу |
 | PUT | `/api/todos/{id}` | обновить задачу |
@@ -78,6 +78,7 @@ cd backend
 python -m venv .venv
 .venv\Scripts\activate        # Windows
 pip install -r requirements.txt
+alembic upgrade head           # создать таблицы (один раз)
 uvicorn app.main:app --reload  # http://localhost:8000
 ```
 
@@ -89,7 +90,13 @@ npm install
 npm run dev                    # http://localhost:5173
 ```
 
-Для локального запуска создайте PostgreSQL-базу и задайте переменную `DATABASE_URL` в `backend/.env`:
+Для локального запуска создайте PostgreSQL-базу и скопируйте шаблон окружения (`.env` в `.gitignore`, креды в коде не хранятся):
+
+```bash
+copy backend\.env.example backend\.env
+```
+
+Задайте `DATABASE_URL` в `backend/.env` (опционально — `ALLOWED_ORIGINS`, список origins через запятую):
 
 ```
 DATABASE_URL=postgresql+psycopg://user:password@localhost:5432/todos
